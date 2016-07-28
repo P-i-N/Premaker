@@ -1,0 +1,2 @@
+# Premaker
+Premake setup script
