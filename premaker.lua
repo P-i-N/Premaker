@@ -10,12 +10,8 @@ end
 -----------------------------------------------------------------------------------------------------------------------
 
 -- Generate named project using defined params
-function GenerateProject(params)
-
-  local name = group().current.filename
-  local projectGroup = group().group
-  
-  print("Generating project: " .. projectGroup .. "/" .. name)
+function GenerateProject(params, name)
+  print("Generating project: " .. name)
   
   function GetParam(key, default)
     local result = params[key]
@@ -61,7 +57,7 @@ function GenerateProject(params)
     filter { }
   end
   
-  files { "**.c", "**.cc", "**.cpp", "**.h", "**.hpp", "**.inl", "**.natvis" }
+  files { "**.c", "**.cc", "**.cpp", "**.h", "**.hpp", "**.inl", "**.cs", "**.natvis" }
   
   if _name ~= "" then
     targetname(_name)
@@ -118,7 +114,7 @@ filter { "configurations:*Release" }
 filter { "system:windows", "platforms:64*" }
   defines { "_WIN64", "WIN64" }
   
-filter { "system:windows" }
+filter { "system:windows", "language:not C#" }
   defines { "_WIN32", "WIN32", "_CRT_SECURE_NO_WARNINGS", "_WIN32_WINNT=0x0601", "WINVER=0x0601", "NTDDI_VERSION=0x06010000" }
   flags { "NoMinimalRebuild", "MultiProcessorCompile" }
   buildoptions { '/wd"4503"' }
@@ -126,17 +122,20 @@ filter { "system:windows" }
   if _ACTION == "vs2015" then
     defines { "_MSC_VER=1900" }
 
-    filter { "system:windows", "configurations:DLL Debug" }
+    filter { "system:windows", "configurations:DLL Debug", "language:not C#" }
       links { "ucrtd.lib", "vcruntimed.lib", "msvcrtd.lib" }
 
-    filter { "system:windows", "configurations:DLL Release" }
+    filter { "system:windows", "configurations:DLL Release", "language:not C#" }
       links { "ucrt.lib", "vcruntime.lib", "msvcrt.lib" }
       
     filter { }
   end
   
-filter { }
+filter { "language:not C#" }
+  characterset ("MBCS")
   buildoptions { "/std:c++latest" }
+  
+filter { }
   includedirs(IncludeDirs)
   libdirs(LibDirs)
   targetdir ".bin/%{cfg.buildcfg}"
@@ -166,14 +165,11 @@ for k, Project in pairs(Projects) do
         name = path.getname(Project.dir)
       end
       
-      -- Project group based on parent project directory name
-      group(path.getdirectory(Project.dir))
-      
       -- Set premake project context
       project(name)
       
       -- Generate project information
-      GenerateProject(Project)
+      GenerateProject(Project, name)
       
       -- Change directory back
       os.chdir(cwd)
