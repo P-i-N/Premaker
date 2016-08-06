@@ -104,6 +104,8 @@ filter { "platforms:64*" }
 filter { "configurations:*Debug" }
   defines { "_DEBUG", "DEBUG" }
   flags { "Symbols" }
+  
+filter { "configurations:*Debug", "language:not C#" }  
   targetsuffix "_debug"
   
 filter { "configurations:*Release" }
