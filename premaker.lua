@@ -1,5 +1,21 @@
--- Reset working directory
-os.chdir(_OPTIONS["cwd"])
+newoption { trigger = "cwd", value = "path", description = "Working directory for solution setup" }
+
+-- Remember CWD
+local oldCWD = os.getcwd()
+
+if _OPTIONS["cwd"] then
+  os.chdir(_OPTIONS["cwd"])
+else
+  _OPTIONS["cwd"] = oldCWD
+end
+
+-- Set default globals
+SolutionName = ""
+IncludeDirs = { ".", "src" }
+LibDirs = { }
+
+-- Get solution setup
+dofile("solution.lua")
 
 -----------------------------------------------------------------------------------------------------------------------
 
@@ -185,3 +201,6 @@ for k, Project in pairs(Projects) do
 end
 
 -----------------------------------------------------------------------------------------------------------------------
+
+-- Restore old working directory
+os.chdir(oldCWD)
