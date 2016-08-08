@@ -150,7 +150,7 @@ filter { "system:windows", "language:not C#" }
   end
   
 filter { "language:not C#" }
-  characterset ("MBCS")
+  if characterset ~= nil then characterset ("MBCS") end
   buildoptions { "/std:c++latest" }
   
 filter { }
