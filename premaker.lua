@@ -43,7 +43,8 @@ function GenerateProject(params, name)
   local _links = GetParam("links", { })
   local _windows_links = GetParam("windows_links", { })
   local _linux_links = GetParam("linux_links", { })
-  local _include = GetParam("include", { })
+  local _includes = GetParam("includes", { })
+  local _libs = GetParam("libs", { })
   local _defines = GetParam("defines", { })
   local _configure_callback = GetParam("configure_callback", nil)
 
@@ -79,8 +80,9 @@ function GenerateProject(params, name)
     targetname(_name)
   end
   
+  includedirs(_includes)
+  libdirs(_libs)
   links(_links)
-  includedirs(_include)
   defines(_defines)
   
   filter { "system:windows" }
@@ -182,6 +184,9 @@ for k, Project in pairs(Projects) do
         -- If name was not specified, create it from project directory name
         name = path.getname(Project.dir)
       end
+      
+      -- Project group based on parent project directory name
+      group(path.getdirectory(Project.dir))
       
       -- Set premake project context
       project(name)

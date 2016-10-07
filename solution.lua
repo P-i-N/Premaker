@@ -21,7 +21,9 @@
 --
 --     linux_links ({ }) - linked libraries on Linux platform
 --
---     include ({ }) - include directories
+--     includes ({ }) - include directories
+--
+--     libs ({ }) - library directories
 --
 --     defines ({ }) - project specific defines
 --
