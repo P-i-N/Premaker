@@ -25,6 +25,8 @@
 --
 --     libs ({ }) - library directories
 --
+--     deps ({ }) - additional library dependencies (not linked)
+--
 --     defines ({ }) - project specific defines
 --
 --     configure_callback (nil) - function called when this project is being configured

@@ -45,6 +45,7 @@ function GenerateProject(params, name)
   local _linux_links = GetParam("linux_links", { })
   local _includes = GetParam("includes", { })
   local _libs = GetParam("libs", { })
+  local _deps = GetParam("deps", { })
   local _defines = GetParam("defines", { })
   local _configure_callback = GetParam("configure_callback", nil)
 
@@ -83,6 +84,7 @@ function GenerateProject(params, name)
   includedirs(_includes)
   libdirs(_libs)
   links(_links)
+  dependson(_deps)
   defines(_defines)
   
   filter { "system:windows" }
