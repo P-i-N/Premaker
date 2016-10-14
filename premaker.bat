@@ -41,4 +41,10 @@ if exist premaker.lua (
   premake5 --file=../Premaker/premaker.lua --cwd=%cd% %GENERATOR%
 )
 
+:checkerror
+if %ERRORLEVEL% == 1 (
+  rem Something went wrong! Pause, so user can read the error message...
+  pause
+)
+
 :done
