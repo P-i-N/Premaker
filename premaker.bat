@@ -20,6 +20,16 @@ goto run
 :autodetect
 set GENERATOR=""
 
+rem Detect Visual Studio 2017
+rem -------------------------
+if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017" (
+  set GENERATOR="vs2017"
+  echo Visual Studio 2017 detected!
+  goto run
+) else (
+  set GENERATOR=%GENERATOR%
+)
+
 rem Detect Visual Studio 2015
 rem -------------------------
 if exist "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin" (
