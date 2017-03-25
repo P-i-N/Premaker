@@ -123,14 +123,14 @@ filter { "platforms:64*" }
   
 filter { "configurations:*Debug" }
   defines { "_DEBUG", "DEBUG" }
-  flags { "Symbols" }
+  symbols "On"
   
 filter { "configurations:*Debug", "language:not C#" }  
   targetsuffix "_debug"
   
 filter { "configurations:*Release" }
   defines { "_NDEBUG", "NDEBUG" }
-  flags { "Symbols" }
+  symbols "On"
   optimize "On"
 
 filter { "system:windows", "platforms:64*" }
