@@ -30,15 +30,6 @@ if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017" (
   set GENERATOR=%GENERATOR%
 )
 
-rem Detect Visual Studio 2015
-rem -------------------------
-if exist "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin" (
-  set GENERATOR="vs2015"
-  echo Visual Studio 2015 detected!
-) else (
-  set GENERATOR=%GENERATOR%
-)
-
 if %GENERATOR%=="" (
   echo Visual Studio not detected! You must specify a premake generator manually.
   goto done

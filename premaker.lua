@@ -25,8 +25,23 @@ end
 
 -----------------------------------------------------------------------------------------------------------------------
 
+-- Convert binary file into C header with uint8_t array
+function GenerateBinaryArray(fileName)
+  
+
+end
+
+-----------------------------------------------------------------------------------------------------------------------
+
+-- Traverse .bin files and convert them to C headers
+function TraverseBinFiles(files)
+
+end
+
+-----------------------------------------------------------------------------------------------------------------------
+
 -- Generate named project using defined params
-function GenerateProject(params, name)
+function GenerateProject(params, prj, name)
   print("Generating project: " .. name)
   
   function GetParam(key, default)
@@ -64,6 +79,8 @@ function GenerateProject(params, name)
     kind "WindowedApp"
   elseif _type == "static" then
     kind "StaticLib"
+  elseif _type == "headeronly" then
+    kind "StaticLib"
   elseif _type == "dynamic" then
     kind "SharedLib"
     defines { _shared_macro }
@@ -77,6 +94,8 @@ function GenerateProject(params, name)
   
   files { "**.c", "**.cc", "**.cpp", "**.h", "**.hpp", "**.inl", "**.cs", "**.natvis" }
   
+  
+
   if _name ~= "" then
     targetname(_name)
   end
@@ -137,21 +156,16 @@ filter { "system:windows", "platforms:64*" }
   defines { "_WIN64", "WIN64" }
   
 filter { "system:windows", "language:not C#" }
-  defines { "_WIN32", "WIN32", "_CRT_SECURE_NO_WARNINGS", "_WIN32_WINNT=0x0601", "WINVER=0x0601", "NTDDI_VERSION=0x06010000" }
+  defines { "_MSC_VER=1910", "_WIN32", "WIN32", "_CRT_SECURE_NO_WARNINGS", "_WIN32_WINNT=0x0602", "WINVER=0x0602", "NTDDI_VERSION=0x06030000" }
   flags { "NoMinimalRebuild", "MultiProcessorCompile" }
   buildoptions { '/wd"4503"' }
-  
-  if _ACTION == "vs2015" then
-    defines { "_MSC_VER=1900" }
+  systemversion "10.0.14393.0"
 
-    filter { "system:windows", "configurations:DLL Debug", "language:not C#" }
-      links { "ucrtd.lib", "vcruntimed.lib", "msvcrtd.lib" }
+  filter { "system:windows", "configurations:DLL Debug", "language:not C#" }
+    links { "ucrtd.lib", "vcruntimed.lib", "msvcrtd.lib" }
 
-    filter { "system:windows", "configurations:DLL Release", "language:not C#" }
-      links { "ucrt.lib", "vcruntime.lib", "msvcrt.lib" }
-      
-    filter { }
-  end
+  filter { "system:windows", "configurations:DLL Release", "language:not C#" }
+    links { "ucrt.lib", "vcruntime.lib", "msvcrt.lib" }
   
 filter { "language:not C#" }
   if characterset ~= nil then characterset ("MBCS") end
@@ -191,10 +205,10 @@ for k, Project in pairs(Projects) do
       group(path.getdirectory(Project.dir))
       
       -- Set premake project context
-      project(name)
+      local prj = project(name)
       
       -- Generate project information
-      GenerateProject(Project, name)
+      GenerateProject(Project, prj, name)
       
       -- Change directory back
       os.chdir(cwd)
