@@ -40,6 +40,19 @@ end
 
 -----------------------------------------------------------------------------------------------------------------------
 
+-- Setup correct Windows SDK version
+function GetWindowsSDKVersion()
+
+  local versionString, errorCode = os.outputof("ver")
+
+  if errorCode ~= 0 or buildNumber == "" then return nil end
+
+  return string.match(versionString, "Version (%d+.?%d+.?%d+.?%d+.?%d)]")
+
+end
+
+-----------------------------------------------------------------------------------------------------------------------
+
 -- Generate named project using defined params
 function GenerateProject(params, prj, name)
   print("Generating project: " .. name)
@@ -159,7 +172,11 @@ filter { "system:windows", "language:not C#" }
   defines { "_MSC_VER=1910", "_WIN32", "WIN32", "_CRT_SECURE_NO_WARNINGS", "_WIN32_WINNT=0x0602", "WINVER=0x0602", "NTDDI_VERSION=0x06030000" }
   flags { "NoMinimalRebuild", "MultiProcessorCompile" }
   buildoptions { '/wd"4503"' }
-  systemversion "10.0.14393.0"
+
+  local sdkVer = GetWindowsSDKVersion()
+  if sdkVer ~= nil then
+    systemversion(sdkVer .. ".0")
+  end
 
   filter { "system:windows", "configurations:DLL Debug", "language:not C#" }
     links { "ucrtd.lib", "vcruntimed.lib", "msvcrtd.lib" }
