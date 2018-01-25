@@ -170,6 +170,7 @@ filter { "system:windows", "platforms:64*" }
   
 filter { "system:windows", "language:not C#" }
   defines { "_MSC_VER=1910", "_WIN32", "WIN32", "_CRT_SECURE_NO_WARNINGS", "_WIN32_WINNT=0x0602", "WINVER=0x0602", "NTDDI_VERSION=0x06030000" }
+  defines { "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" }
   flags { "NoMinimalRebuild", "MultiProcessorCompile" }
   buildoptions { '/wd"4503"' }
 
