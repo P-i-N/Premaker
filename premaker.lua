@@ -47,7 +47,7 @@ function GetWindowsSDKVersion()
 
   if errorCode ~= 0 or buildNumber == "" then return nil end
 
-  return string.match(versionString, "Version (%d+.?%d+.?%d+.?%d+.?%d)]")
+  return string.match(versionString, "Version (%d+.?%d+.?%d+).+]")
 
 end
 
